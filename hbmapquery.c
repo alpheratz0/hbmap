@@ -51,6 +51,7 @@ string_builder_create(size_t cap)
 		die("OOM");
 	sb->cap = cap;
 	sb->len = 0;
+	sb->buffer[sb->len] = '\0';
 	return sb;
 }
 
@@ -71,6 +72,7 @@ string_builder_append(struct string_builder *sb, size_t len, char *data)
 	for (i = 0; i < len; ++i)
 		sb->buffer[sb->len + i] = data[i];
 	sb->len += len;
+	sb->buffer[sb->len] = '\0';
 }
 
 static void
@@ -116,20 +118,22 @@ haxmaps_query_maps(const char *query)
 
 	name_end = sb->buffer;
 
-	while (1) {
-		url_begin = strchr(name_end+1, '\'');
-		if (!url_begin) break;
-		url_begin++;
-		url_end = strchr(url_begin, '\'');
-		if (!url_end) break;
-		*url_end = '\0';
-		name_begin = strstr(url_end+1, "</b> ");
-		if (!name_begin) break;
-		name_begin += 5;
-		name_end = strstr(name_begin, "</li>");
-		if (!name_end) break;
-		*name_end = '\0';
-		printf("%s - %s\n", url_begin, name_begin);
+	if (sb->len > 0) {
+		while (1) {
+			url_begin = strchr(name_end+1, '\'');
+			if (!url_begin) break;
+			url_begin++;
+			url_end = strchr(url_begin, '\'');
+			if (!url_end) break;
+			*url_end = '\0';
+			name_begin = strstr(url_end+1, "</b> ");
+			if (!name_begin) break;
+			name_begin += 5;
+			name_end = strstr(name_begin, "</li>");
+			if (!name_end) break;
+			*name_end = '\0';
+			printf("%s - %s\n", url_begin, name_begin);
+		}
 	}
 
 	free(query_escaped);
