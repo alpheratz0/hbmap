@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+query=$(echo '' | rofi -dmenu -p 'search')
+maps=$(hbmapquery "$query")
+idx=$(echo "$maps" | cut -d'-' -f2- | rofi -dmenu -i -p 'select map' -format 'd')
+map=$(echo "$maps" | head -n"$idx" | tail -n1)
+map_url=$(echo "$map" | cut -d'-' -f1 | sed 's/\/map/\/dl/g')
+map_name=$(echo "$map" | cut -d'-' -f2- | tr -c '[:alnum:].' '_')
+
+mkdir -p ~/haxball-maps
+curl -s "$map_url" -o "${HOME}/haxball-maps/${map_name}.hbs"
