@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include <stdarg.h>
 #include <curl/curl.h>
 
@@ -93,6 +94,7 @@ static void
 haxmaps_query_maps(const char *query)
 {
 	CURL *curl;
+	CURLcode res;
 	char curl_errbuf[CURL_ERROR_SIZE];
 	char *query_escaped, post_fields[256];
 	struct string_builder *sb;
@@ -114,7 +116,11 @@ haxmaps_query_maps(const char *query)
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "hbmapquery/"VERSION);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_cb);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, sb);
-	curl_easy_perform(curl);
+
+	res = curl_easy_perform(curl);
+
+	if (res != CURLE_OK)
+		die("curl_easy_perform failed: %s", curl_easy_strerror(res));
 
 	name_end = sb->buffer;
 
@@ -142,9 +148,31 @@ haxmaps_query_maps(const char *query)
 }
 
 static void
+haxmaps_query_random_map(void)
+{
+	CURL *curl;
+	CURLcode res;
+	char *location;
+
+	curl = curl_easy_init();
+	curl_easy_setopt(curl, CURLOPT_URL, "https://haxmaps.com/random");
+	res = curl_easy_perform(curl);
+
+	if (res != CURLE_OK)
+		die("curl_easy_perform failed: %s", curl_easy_strerror(res));
+
+	res = curl_easy_getinfo(curl, CURLINFO_REDIRECT_URL, &location);
+
+	if ((res == CURLE_OK) && location)
+		printf("%s\n", location);
+
+	curl_easy_cleanup(curl);
+}
+
+static void
 usage(void)
 {
-	puts("usage: hbmapquery [-hv] [query]");
+	puts("usage: hbmapquery [-hrv] [query]");
 	exit(0);
 }
 
@@ -159,14 +187,17 @@ int
 main(int argc, char **argv)
 {
 	const char *query;
+	bool get_random_map;
 
 	query = NULL;
+	get_random_map = false;
 
 	while (++argv, --argc > 0) {
 		if ((*argv)[0] == '-' && (*argv)[1] != '\0' && (*argv)[2] == '\0') {
 			switch ((*argv)[1]) {
 				case 'h': usage(); break;
 				case 'v': version(); break;
+				case 'r': get_random_map = true; break;
 				default: die("invalid option %s", *argv); break;
 			}
 		} else {
@@ -176,8 +207,14 @@ main(int argc, char **argv)
 		}
 	}
 
+	if (NULL != query && get_random_map)
+		die("you can't do that");
+
 	if (NULL != query)
 		haxmaps_query_maps(query);
+
+	if (get_random_map)
+		haxmaps_query_random_map();
 
 	return 0;
 }
