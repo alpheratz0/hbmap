@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 query=$(echo '' | rofi -dmenu -p 'search')
-maps=$(hbmap "$query")
+maps=$(hbmap -s "$query")
 idx=$(echo "$maps" | cut -d'-' -f2- | rofi -dmenu -i -p 'select map' -format 'd')
 map=$(echo "$maps" | head -n"$idx" | tail -n1)
 map_url=$(echo "$map" | cut -d'-' -f1 | sed 's/\/map/\/dl/g')
