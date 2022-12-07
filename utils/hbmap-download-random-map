@@ -1,3 +1,3 @@
 #!/bin/sh
 
-hbmap -r | sed 's/\/map/\/dl/g' | tr -cd '0-9' | xargs -I{} curl -s -o "{}.hbs" "https://haxmaps.com/dl/{}"
+hbmap -r | tr -cd '0-9' | xargs -I{} curl -s -o "{}.hbs" "https://haxmaps.com/dl/{}"
