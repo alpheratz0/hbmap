@@ -1,11 +1,11 @@
-.Dd December 05, 2022
+.Dd December 07, 2022
 .Dt HBMAPQUERY 1
 .Sh NAME
 .Nm hbmapquery
 .Nd search maps from haxmaps.com
 .Sh SYNOPSIS
 .Nm
-.Op Fl hv
+.Op Fl hrv
 .Op Ar query
 .Sh DESCRIPTION
 The
@@ -16,6 +16,8 @@ the result in an easy parseable format <MAP_URL> - <MAP_NAME>.
 .Bl -tag -width indent
 .It Fl h
 show usage
+.It Fl r
+get a random map url
 .It Fl v
 display the program version
 .El
