@@ -1,6 +1,6 @@
-hbmapquery is a utility that lets you search maps from the
+hbmap is a utility that lets you search maps from the
 haxmaps.com website and prints the results in an easy parseable format.
-For more information about it's usage check `man hbmapquery`.
+For more information about it's usage check `man hbmap`.
 
 This program requires libcurl to be installed.
 In order to build this program you need to run `make`.

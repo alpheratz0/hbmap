@@ -35,7 +35,7 @@ die(const char *fmt, ...)
 {
 	va_list args;
 
-	fputs("hbmapquery: ", stderr);
+	fputs("hbmap: ", stderr);
 	va_start(args, fmt);
 	vfprintf(stderr, fmt, args);
 	va_end(args);
@@ -113,7 +113,7 @@ haxmaps_query_maps(const char *query)
 	curl_easy_setopt(curl, CURLOPT_POST, 1L);
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
-	curl_easy_setopt(curl, CURLOPT_USERAGENT, "hbmapquery/"VERSION);
+	curl_easy_setopt(curl, CURLOPT_USERAGENT, "hbmap/"VERSION);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_cb);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, sb);
 
@@ -172,14 +172,14 @@ haxmaps_query_random_map(void)
 static void
 usage(void)
 {
-	puts("usage: hbmapquery [-hrv] [query]");
+	puts("usage: hbmap [-hrv] [query]");
 	exit(0);
 }
 
 static void
 version(void)
 {
-	puts("hbmapquery version "VERSION);
+	puts("hbmap version "VERSION);
 	exit(0);
 }
 
