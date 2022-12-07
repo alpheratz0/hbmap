@@ -43,6 +43,14 @@ die(const char *fmt, ...)
 	exit(1);
 }
 
+static const char *
+enotnull(const char *str, const char *name)
+{
+	if (NULL == str)
+		die("%s cannot be null", name);
+	return str;
+}
+
 static struct string_builder *
 string_builder_create(size_t cap)
 {
@@ -172,7 +180,7 @@ haxmaps_query_random_map(void)
 static void
 usage(void)
 {
-	puts("usage: hbmap [-hrv] [query]");
+	puts("usage: hbmap [-hrv] [-s query]");
 	exit(0);
 }
 
@@ -198,22 +206,17 @@ main(int argc, char **argv)
 				case 'h': usage(); break;
 				case 'v': version(); break;
 				case 'r': get_random_map = true; break;
+				case 's': --argc; query = enotnull(*++argv, "query"); break;
 				default: die("invalid option %s", *argv); break;
 			}
 		} else {
-			if (NULL != query)
-				die("unexpected argument: %s", *argv);
-			query = *argv;
+			die("unexpected argument: %s", *argv);
 		}
 	}
 
-	if (NULL != query && get_random_map)
-		die("you can't do that");
-
 	if (NULL != query)
 		haxmaps_query_maps(query);
-
-	if (get_random_map)
+	else if (get_random_map)
 		haxmaps_query_random_map();
 
 	return 0;
