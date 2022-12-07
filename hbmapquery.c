@@ -132,7 +132,7 @@ haxmaps_query_maps(const char *query)
 			name_end = strstr(name_begin, "</li>");
 			if (!name_end) break;
 			*name_end = '\0';
-			printf("%s - %s\n", url_begin, name_begin);
+			printf("%s-%s\n", url_begin, name_begin);
 		}
 	}
 
