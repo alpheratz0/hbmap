@@ -160,18 +160,32 @@ haxmaps_query_random_map(void)
 {
 	CURL *curl;
 	CURLcode res;
+	long respose_code;
 	char *location;
 
 	curl = curl_easy_init();
 	curl_easy_setopt(curl, CURLOPT_URL, "https://haxmaps.com/random");
+	curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
 	res = curl_easy_perform(curl);
+	location = NULL;
 
 	if (res != CURLE_OK)
 		die("curl_easy_perform failed: %s", curl_easy_strerror(res));
 
+	res = curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &respose_code);
+
+	if (res != CURLE_OK)
+		die("curl_easy_getinfo failed: %s", curl_easy_strerror(res));
+
+	if (respose_code != 302)
+		die("haxmaps.com didn't redirect");
+
 	res = curl_easy_getinfo(curl, CURLINFO_REDIRECT_URL, &location);
 
-	if ((res == CURLE_OK) && location)
+	if (res != CURLE_OK)
+		die("curl_easy_getinfo failed: %s", curl_easy_strerror(res));
+
+	if (NULL != location)
 		printf("%s\n", location);
 
 	curl_easy_cleanup(curl);
