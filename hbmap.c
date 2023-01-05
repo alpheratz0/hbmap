@@ -228,10 +228,11 @@ main(int argc, char **argv)
 		}
 	}
 
-	if (NULL != query)
+	if (NULL != query) {
 		haxmaps_query_maps(query);
-	else if (get_random_map)
+	} else if (get_random_map) {
 		haxmaps_query_random_map();
+	}
 
 	return 0;
 }
