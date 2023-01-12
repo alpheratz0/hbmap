@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2022 <alpheratz99@protonmail.com>
+	Copyright (C) 2022-2023 <alpheratz99@protonmail.com>
 
 	This program is free software; you can redistribute it and/or modify it under
 	the terms of the GNU General Public License version 2 as published by the
@@ -109,6 +109,7 @@ haxmaps_query_maps(const char *query)
 	char *url_begin, *url_end;
 	char *name_begin, *name_end;
 
+	curl_global_init(CURL_GLOBAL_DEFAULT);
 	curl = curl_easy_init();
 	query_escaped = curl_easy_escape(curl, query, strlen(query));
 	sb = string_builder_create(256);
@@ -152,6 +153,7 @@ haxmaps_query_maps(const char *query)
 
 	free(query_escaped);
 	curl_easy_cleanup(curl);
+	curl_global_cleanup();
 	string_builder_free(sb);
 }
 
@@ -163,6 +165,7 @@ haxmaps_query_random_map(void)
 	long respose_code;
 	char *location;
 
+	curl_global_init(CURL_GLOBAL_DEFAULT);
 	curl = curl_easy_init();
 	curl_easy_setopt(curl, CURLOPT_URL, "https://haxmaps.com/random");
 	curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
@@ -189,6 +192,7 @@ haxmaps_query_random_map(void)
 		printf("%s\n", location);
 
 	curl_easy_cleanup(curl);
+	curl_global_cleanup();
 }
 
 static void
