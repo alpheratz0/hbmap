@@ -169,6 +169,10 @@ haxmaps_query_random_map(void)
 	curl = curl_easy_init();
 	curl_easy_setopt(curl, CURLOPT_URL, "https://haxmaps.com/random");
 	curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
+	curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+	curl_easy_setopt(curl, CURLOPT_USERAGENT, "hbmap/"VERSION);
+
 	res = curl_easy_perform(curl);
 	location = NULL;
 
