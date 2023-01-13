@@ -103,7 +103,6 @@ haxmaps_query_maps(const char *query)
 {
 	CURL *curl;
 	CURLcode res;
-	char curl_errbuf[CURL_ERROR_SIZE];
 	char *query_escaped, post_fields[256];
 	struct string_builder *sb;
 	char *url_begin, *url_end;
@@ -118,7 +117,6 @@ haxmaps_query_maps(const char *query)
 
 	curl_easy_setopt(curl, CURLOPT_URL, "https://haxmaps.com/hb/rpc");
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_fields);
-	curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_errbuf);
 	curl_easy_setopt(curl, CURLOPT_POST, 1L);
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
