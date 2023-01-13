@@ -133,17 +133,28 @@ haxmaps_query_maps(const char *query)
 
 	name_end = sb->buffer;
 
+	/* Response Format                                                     */
+	/*                                                                     */
+	/* The response will contain HTML list elements "li" one after the     */
+	/* other. Here's an example (it is formatted, the original has no \n): */
+	/*                                                                     */
+	/*      <li alt="map_thumbnail_link_here.png"                          */
+	/*          onClick="location.href='map_link_here'">                   */
+	/*          DLS:<b>n_of_downloads_here</b> map_name_here               */
+	/*      </li>                                                          */
+	/*                                                                     */
+
 	if (sb->len > 0) {
 		while (1) {
-			url_begin = strchr(name_end+1, '\'');
+			url_begin = strchr(name_end + 1, '\'');
 			if (!url_begin) break;
 			url_begin++;
 			url_end = strchr(url_begin, '\'');
 			if (!url_end) break;
 			*url_end = '\0';
-			name_begin = strstr(url_end+1, "</b> ");
+			name_begin = strstr(url_end + 1, "</b> ");
 			if (!name_begin) break;
-			name_begin += 5;
+			name_begin += sizeof("</b> ") - 1;
 			name_end = strstr(name_begin, "</li>");
 			if (!name_end) break;
 			*name_end = '\0';
