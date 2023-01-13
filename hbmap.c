@@ -91,9 +91,11 @@ string_builder_free(struct string_builder *sb)
 	free(sb);
 }
 
-static unsigned int
-write_cb(char *in, unsigned int size, unsigned int nmemb, struct string_builder *sb)
+static size_t
+write_cb(char *in, size_t size, size_t nmemb, void *data)
 {
+	struct string_builder *sb;
+	sb = data;
 	string_builder_append(sb, nmemb, in);
 	return size * nmemb;
 }
