@@ -10,3 +10,4 @@ map_name=$(echo "$map" | cut -d'-' -f2- | tr -c '[:alnum:].' '_')
 
 mkdir -p ~/haxball-maps
 curl -s "$map_url" -o "${HOME}/haxball-maps/${map_name}.hbs"
+notify-send 'hbmap-rofi-frontend' 'A map has been downloaded to ~/haxball-maps'
