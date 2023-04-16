@@ -4,6 +4,7 @@ query=$(echo '' | rofi -dmenu -p 'search')
 maps=$(hbmap -s "$query")
 test "${#maps}" -ne 0
 idx=$(echo "$maps" | cut -d'-' -f2- | rofi -dmenu -i -p 'select map' -format 'd')
+test "$idx" -ne 0
 map=$(echo "$maps" | head -n"$idx" | tail -n1)
 map_url=$(echo "$map" | cut -d'-' -f1 | sed 's/\/map/\/dl/g')
 map_name=$(echo "$map" | cut -d'-' -f2- | tr -c '[:alnum:].' '_')
