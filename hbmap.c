@@ -73,13 +73,17 @@ string_builder_resize(struct string_builder *sb, size_t cap)
 }
 
 static void
+string_builder_resize_near_pow2(struct string_builder *sb, size_t cap)
+{
+	while (sb->cap < cap)
+		string_builder_resize(sb, sb->cap * 2);
+}
+
+static void
 string_builder_append(struct string_builder *sb, size_t len, char *data)
 {
-	size_t i;
-	while (sb->cap < sb->len + len)
-		string_builder_resize(sb, sb->cap * 2);
-	for (i = 0; i < len; ++i)
-		sb->buffer[sb->len + i] = data[i];
+	string_builder_resize_near_pow2(sb, sb->len + len);
+	strncpy(sb->buffer + sb->len, data, len);
 	sb->len += len;
 	sb->buffer[sb->len] = '\0';
 }
@@ -94,9 +98,7 @@ string_builder_free(struct string_builder *sb)
 static size_t
 write_cb(char *in, size_t size, size_t nmemb, void *data)
 {
-	struct string_builder *sb;
-	sb = data;
-	string_builder_append(sb, nmemb, in);
+	string_builder_append((struct string_builder *)data, nmemb, in);
 	return size * nmemb;
 }
 
