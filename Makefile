@@ -18,6 +18,8 @@ install: all
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
 	cp -f hbmap.1 $(DESTDIR)$(MANPREFIX)/man1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/hbmap.1
+	cp -f utils/hbmap-download-random-map $(DESTDIR)$(PREFIX)/bin
+	cp -f utils/hbmap-rofi-frontend $(DESTDIR)$(PREFIX)/bin
 
 dist: clean
 	mkdir -p hbmap-$(VERSION)
@@ -28,4 +30,6 @@ dist: clean
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/hbmap
+	rm -f $(DESTDIR)$(PREFIX)/bin/hbmap-download-random-map
+	rm -f $(DESTDIR)$(PREFIX)/bin/hbmap-rofi-frontend
 	rm -f $(DESTDIR)$(MANPREFIX)/man1/hbmap.1
