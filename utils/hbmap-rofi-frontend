@@ -1,14 +1,35 @@
 #!/bin/sh -e
+#
+# Copyright (C) 2023 <alpheratz99@protonmail.com>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 2 as published by
+# the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc., 59
+# Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
 
-query=$(echo '' | rofi -dmenu -p 'search')
-maps=$(hbmap -s "$query")
-test "${#maps}" -ne 0
-idx=$(echo "$maps" | cut -d'-' -f2- | rofi -dmenu -i -p 'select map' -format 'd')
-test "$idx" -ne 0
-map=$(echo "$maps" | head -n"$idx" | tail -n1)
-map_url=$(echo "$map" | cut -d'-' -f1 | sed 's/\/map/\/dl/g')
-map_name=$(echo "$map" | cut -d'-' -f2- | tr -c '[:alnum:].' '_')
+main()
+{
+	query=$(echo '' | rofi -dmenu -p 'search')
+	maps=$(hbmap -s "$query")
+	test "${#maps}" -ne 0
+	idx=$(echo "$maps" | cut -d'-' -f2- | rofi -dmenu -i -p 'select map' -format 'd')
+	test "$idx" -ne 0
+	map=$(echo "$maps" | head -n"$idx" | tail -n1)
+	map_url=$(echo "$map" | cut -d'-' -f1 | sed 's/\/map/\/dl/g')
+	map_name=$(echo "$map" | cut -d'-' -f2- | tr -c '[:alnum:].' '_')
 
-mkdir -p ~/haxball-maps
-curl -s "$map_url" -o "${HOME}/haxball-maps/${map_name}.hbs"
-notify-send 'hbmap-rofi-frontend' 'A map has been downloaded to ~/haxball-maps'
+	mkdir -p ~/haxball-maps
+	curl -s "$map_url" -o "${HOME}/haxball-maps/${map_name}.hbs"
+	notify-send 'hbmap-rofi-frontend' 'A map has been downloaded to ~/haxball-maps'
+}
+
+main
