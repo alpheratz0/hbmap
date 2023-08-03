@@ -23,7 +23,8 @@ install: all
 
 dist: clean
 	mkdir -p hbmap-$(VERSION)
-	cp -R COPYING config.mk Makefile README hbmap.1 hbmap.c hbmap-$(VERSION)
+	cp -R COPYING config.mk Makefile README utils \
+		hbmap.1 hbmap.c hbmap-$(VERSION)
 	tar -cf hbmap-$(VERSION).tar hbmap-$(VERSION)
 	gzip hbmap-$(VERSION).tar
 	rm -rf hbmap-$(VERSION)
