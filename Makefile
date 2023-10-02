@@ -6,7 +6,7 @@ include config.mk
 all: hbmap
 
 hbmap: hbmap.o
-	$(CC) $(LDFLAGS) -o hbmap hbmap.o $(LDLIBS)
+	$(CC) $(LDFLAGS) -o hbmap hbmap.o
 
 clean:
 	rm -f hbmap hbmap.o hbmap-$(VERSION).tar.gz
